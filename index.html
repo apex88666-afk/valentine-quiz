@@ -131,6 +131,37 @@ canvas{
   pointer-events:none;
   z-index:5;
 }
+
+
+
+#videoOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:100;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 1s ease;
+}
+
+#videoOverlay.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+#videoOverlay video{
+  width:90%;
+  max-width:800px;
+  max-height:85vh;
+  border-radius:20px;
+  box-shadow:0 20px 60px rgba(255,0,120,.5);
+}
+
+
+
 </style>
 </head>
 
@@ -171,6 +202,13 @@ canvas{
 <button id="finalBtn"></button>
 </div>
 <p id="finalMessage" style="text-align:center;margin-top:15px;font-weight:700;"></p>
+<div id="finalVideoContainer" style="display:none; margin-top:20px; text-align:center;">
+  <video id="finalVideo" width="100%" style="max-width:500px; border-radius:20px; box-shadow:0 10px 30px rgba(255,0,120,.3);" muted playsinline>
+    <source src="cute.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
 </div>
 
 </div>
@@ -261,23 +299,44 @@ document.getElementById("fill").style.width=(score/questions.length*100)+"%";
 let hearts=Math.round(score/questions.length*5);
 document.getElementById("hearts").innerText="❤️".repeat(hearts)+"🤍".repeat(5-hearts)+" ("+score+"/16)";
 }
-
 function showResult(){
-document.getElementById("quiz").classList.add("hidden");
-document.getElementById("result").classList.remove("hidden");
-if(score/questions.length>=0.8){
-document.getElementById("resultTitle").innerText="You unlocked: Forever Valentine 💍💖";
-document.getElementById("finalBtn").innerText="Will you be my Valentine?";
-document.getElementById("finalBtn").onclick=()=>{
-launchConfetti(400);
-document.getElementById("finalMessage").innerText="I love you sooo much baby mwah 💖💋";
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+
+  if(score/questions.length >= 0.8){
+
+    document.getElementById("resultTitle").innerText =
+      "You unlocked: Forever Valentine 💍💖";
+
+    document.getElementById("finalBtn").innerText =
+      "Will you be my Valentine?";
+
+   document.getElementById("finalBtn").onclick = () => {
+
+  launchConfetti(400);
+
+  document.getElementById("finalMessage").innerText =
+    "I love you sooo much baby mwah 💖💋";
+
+  const overlay = document.getElementById("videoOverlay");
+
+  overlay.classList.add("show");
+
 };
-}else{
-document.getElementById("resultTitle").innerText="Hmm… I think we need more dates 👀💕";
-document.getElementById("finalBtn").innerText="Retry";
-document.getElementById("finalBtn").onclick=()=>location.reload();
+
+
+  } else {
+
+    document.getElementById("resultTitle").innerText =
+      "Hmm… I think we need more dates 👀💕";
+
+    document.getElementById("finalBtn").innerText = "Retry";
+
+    document.getElementById("finalBtn").onclick =
+      () => location.reload();
+  }
 }
-}
+
 
 /* Confetti */
 const canvas=document.getElementById("confetti");
@@ -322,5 +381,13 @@ setTimeout(()=>h.remove(),8000);
 },400);
 
 </script>
+<div id="videoOverlay">
+  <video id="finalVideo" controls>
+    <source src="cute.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+
 </body>
 </html>
